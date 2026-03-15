@@ -319,7 +319,15 @@ Get a summary and metadata preview of a specific indexed document.
 
 ## Example Interaction Log
 
-Below are real Q&A interactions captured by running the `query_documents` tool inside Docker against two indexed PDFs: `nexla-platform-overview.pdf` (5 pages, 10 chunks) and `data-engineering-best-practices.pdf` (5 pages, 14 chunks).
+Below are real Q&A interactions captured by running the `query_documents` tool inside Docker against 5 indexed PDFs (72 total chunks):
+
+| Document | Pages | Chunks |
+|----------|-------|--------|
+| `nexla-platform-overview.pdf` | 5 | 10 |
+| `data-engineering-best-practices.pdf` | 5 | 14 |
+| `ai-ml-pipeline-architecture.pdf` | 5 | 16 |
+| `data-security-compliance-guide.pdf` | 5 | 15 |
+| `api-design-best-practices.pdf` | 5 | 17 |
 
 ### Example 1: Single-Document Factual Question
 
@@ -327,13 +335,13 @@ Below are real Q&A interactions captured by running the `query_documents` tool i
 
 ```json
 {
-  "answer": "A Nexset is a core abstraction in the Nexla platform, described as a self-describing, portable data unit that encapsulates schema, metadata, and transformation logic. It allows data engineers and analysts to treat data products as composable building blocks rather than brittle pipelines. This abstraction facilitates the creation, management, and monitoring of data flows across disparate systems without the need for writing custom ETL code [Source: nexla-platform-overview.pdf, Page 1].",
+  "answer": "A Nexset is a core abstraction in the Nexla platform, described as a self-describing, portable data unit that encapsulates schema, metadata, and transformation logic. It allows data engineers and analysts to treat data products as composable building blocks rather than brittle pipelines. Nexsets facilitate the creation, management, and monitoring of data flows across disparate systems without the need for writing custom ETL code [Source: nexla-platform-overview.pdf, Page 1].",
   "sources": [
     { "document": "nexla-platform-overview.pdf", "page": 1, "relevance_score": 0.5392 },
     { "document": "nexla-platform-overview.pdf", "page": 1, "relevance_score": 0.4043 },
     { "document": "data-engineering-best-practices.pdf", "page": 4, "relevance_score": 0.2509 },
-    { "document": "nexla-platform-overview.pdf", "page": 2, "relevance_score": 0.1367 },
-    { "document": "nexla-platform-overview.pdf", "page": 4, "relevance_score": 0.0695 }
+    { "document": "data-security-compliance-guide.pdf", "page": 3, "relevance_score": 0.2201 },
+    { "document": "nexla-platform-overview.pdf", "page": 2, "relevance_score": 0.1367 }
   ],
   "chunks_used": 5
 }
@@ -341,17 +349,17 @@ Below are real Q&A interactions captured by running the `query_documents` tool i
 
 ### Example 2: Cross-Document Comparison
 
-**Question:** *"Compare the approaches to data pipeline orchestration described across both documents."*
+**Question:** *"Compare the approaches to data pipeline orchestration and workflow management described across the documents."*
 
 ```json
 {
-  "answer": "The approaches to data pipeline orchestration described in the documents highlight different tools and methodologies:\n\n1. **Apache Airflow**: It is the most popular orchestrator for batch data pipelines, used by companies like Airbnb, Google, and PayPal. Airflow DAGs define task dependencies, scheduling, and retry behavior. Managed offerings include Google Cloud Composer, Amazon MWAA, and Astronomer [Source: data-engineering-best-practices.pdf, Page 4].\n\n2. **Prefect and Dagster**: These are modern alternatives to Airflow. Prefect emphasizes a Pythonic API and dynamic workflows, while Dagster introduces software-defined assets for more intuitive data lineage and dependency management [Source: data-engineering-best-practices.pdf, Page 4].\n\n3. **Event-driven architectures**: In these architectures, orchestration is often replaced by choreography, where each service reacts to events independently without a central coordinator. This pattern is compatible with tools like Kafka and cloud event buses such as AWS EventBridge and Google Eventarc [Source: data-engineering-best-practices.pdf, Page 4].\n\n4. **Nexla's Flow Engine**: Nexla provides built-in orchestration that eliminates the need for a separate orchestrator in many use cases. Flows can be triggered on a schedule, on data arrival, or via API call, with dependencies managed through Nexset lineage tracking [Source: data-engineering-best-practices.pdf, Page 4].\n\nOverall, the documents describe a range of orchestration tools from traditional orchestrators like Airflow to modern alternatives like Prefect and Dagster, as well as event-driven and integrated orchestration solutions like Nexla's Flow Engine.",
+  "answer": "The documents describe several approaches to data pipeline orchestration and workflow management:\n\n1. **Apache Airflow**: It is the most popular orchestrator for batch data pipelines, used by major companies like Airbnb, Google, and PayPal. Airflow DAGs (Directed Acyclic Graphs) define task dependencies, scheduling, and retry behavior. Managed offerings include Google Cloud Composer, Amazon MWAA, and Astronomer [Source: data-engineering-best-practices.pdf, Page 4].\n\n2. **Prefect and Dagster**: These are modern alternatives to Airflow. Prefect emphasizes a Pythonic API and dynamic workflows, while Dagster introduces software-defined assets for more intuitive data lineage and dependency management [Source: data-engineering-best-practices.pdf, Page 4].\n\n3. **Event-driven architectures**: In these architectures, orchestration is often replaced by choreography, where each service reacts to events independently without a central coordinator. This pattern is compatible with tools like Kafka and cloud event buses such as AWS EventBridge and Google Eventarc, but it requires careful attention to failure handling and observability [Source: data-engineering-best-practices.pdf, Page 4].\n\n4. **Nexla's Flow Engine**: This provides built-in orchestration that can eliminate the need for a separate orchestrator in many use cases. It supports scheduling, retry logic, and exactly-once delivery semantics. Dependencies between flows are managed through Nexset lineage tracking [Source: nexla-platform-overview.pdf, Page 2].\n\nEach approach has its strengths, with Airflow being widely adopted for its robust DAG-based orchestration, Prefect and Dagster offering modern features for dynamic workflows and intuitive management, event-driven architectures providing decentralized orchestration, and Nexla's Flow Engine offering integrated orchestration with advanced features like exactly-once delivery.",
   "sources": [
-    { "document": "data-engineering-best-practices.pdf", "page": 4, "relevance_score": 0.3652 },
-    { "document": "data-engineering-best-practices.pdf", "page": 1, "relevance_score": 0.2967 },
-    { "document": "data-engineering-best-practices.pdf", "page": 4, "relevance_score": 0.1018 },
-    { "document": "data-engineering-best-practices.pdf", "page": 2, "relevance_score": 0.0377 },
-    { "document": "nexla-platform-overview.pdf", "page": 1, "relevance_score": -0.0214 }
+    { "document": "data-engineering-best-practices.pdf", "page": 4, "relevance_score": 0.4304 },
+    { "document": "data-engineering-best-practices.pdf", "page": 1, "relevance_score": 0.2434 },
+    { "document": "data-engineering-best-practices.pdf", "page": 4, "relevance_score": 0.101 },
+    { "document": "ai-ml-pipeline-architecture.pdf", "page": 1, "relevance_score": -0.0014 },
+    { "document": "nexla-platform-overview.pdf", "page": 2, "relevance_score": -0.0403 }
   ],
   "chunks_used": 5
 }
@@ -359,19 +367,21 @@ Below are real Q&A interactions captured by running the `query_documents` tool i
 
 ### Example 3: Specific Detail Extraction
 
-**Question:** *"What companies and organizations are mentioned across the documents?"*
+**Question:** *"What companies and organizations are mentioned across all the documents?"*
 
 ```json
 {
-  "answer": "The companies and organizations mentioned across the documents are:\n\n1. Alation [Source: data-engineering-best-practices.pdf, Page 5]\n2. Collibra [Source: data-engineering-best-practices.pdf, Page 5]\n3. LinkedIn (DataHub) [Source: data-engineering-best-practices.pdf, Page 5]\n4. Lyft (Amundsen) [Source: data-engineering-best-practices.pdf, Page 5]\n5. Thoughtworks [Source: data-engineering-best-practices.pdf, Page 5]\n6. Palo Alto Networks [Source: nexla-platform-overview.pdf, Page 5]\n7. DoorDash [Source: nexla-platform-overview.pdf, Page 5]\n8. Postmates (now part of Uber) [Source: nexla-platform-overview.pdf, Page 5]\n9. Several Fortune 500 financial services firms [Source: nexla-platform-overview.pdf, Page 5]\n10. Vertex Ventures [Source: nexla-platform-overview.pdf, Page 5]\n11. Valley Capital Partners [Source: nexla-platform-overview.pdf, Page 5]\n12. Salesforce [Source: nexla-platform-overview.pdf, Page 1]\n13. HubSpot [Source: nexla-platform-overview.pdf, Page 1]\n14. Workday [Source: nexla-platform-overview.pdf, Page 1]\n15. Okta [Source: nexla-platform-overview.pdf, Page 3]\n16. Azure AD [Source: nexla-platform-overview.pdf, Page 3]\n17. OneLogin [Source: nexla-platform-overview.pdf, Page 3]",
+  "answer": "The companies and organizations mentioned across the documents are:\n\n1. Alation [Source: data-engineering-best-practices.pdf, Page 5]\n2. Collibra [Source: data-engineering-best-practices.pdf, Page 5]\n3. DataHub (by LinkedIn) [Source: data-engineering-best-practices.pdf, Page 5]\n4. Amundsen (by Lyft) [Source: data-engineering-best-practices.pdf, Page 5]\n5. Google [Source: data-security-compliance-guide.pdf, Page 5]\n6. Etsy [Source: data-security-compliance-guide.pdf, Page 5]\n7. PagerDuty [Source: data-security-compliance-guide.pdf, Page 5]\n8. Nexla [Source: data-security-compliance-guide.pdf, Page 2; nexla-platform-overview.pdf, Page 1]\n9. Snowflake [Source: data-security-compliance-guide.pdf, Page 2; nexla-platform-overview.pdf, Page 1]\n10. Databricks [Source: data-security-compliance-guide.pdf, Page 2]\n11. Salesforce [Source: nexla-platform-overview.pdf, Page 1]\n12. HubSpot [Source: nexla-platform-overview.pdf, Page 1]\n13. Workday [Source: nexla-platform-overview.pdf, Page 1]\n14. Palo Alto Networks [Source: nexla-platform-overview.pdf, Page 5]\n15. DoorDash [Source: nexla-platform-overview.pdf, Page 5]\n16. Postmates (now part of Uber) [Source: nexla-platform-overview.pdf, Page 5]\n\nThese companies are mentioned in various contexts related to data engineering, security compliance, and platform capabilities.",
   "sources": [
-    { "document": "data-engineering-best-practices.pdf", "page": 5, "relevance_score": -0.3889 },
-    { "document": "nexla-platform-overview.pdf", "page": 5, "relevance_score": -0.5532 },
-    { "document": "nexla-platform-overview.pdf", "page": 1, "relevance_score": -0.5733 },
-    { "document": "nexla-platform-overview.pdf", "page": 3, "relevance_score": -0.5959 },
-    { "document": "data-engineering-best-practices.pdf", "page": 1, "relevance_score": -0.6138 }
+    { "document": "data-engineering-best-practices.pdf", "page": 5, "relevance_score": -0.3718 },
+    { "document": "data-security-compliance-guide.pdf", "page": 5, "relevance_score": -0.397 },
+    { "document": "data-security-compliance-guide.pdf", "page": 2, "relevance_score": -0.4686 },
+    { "document": "nexla-platform-overview.pdf", "page": 1, "relevance_score": -0.5405 },
+    { "document": "data-security-compliance-guide.pdf", "page": 2, "relevance_score": -0.545 },
+    { "document": "api-design-best-practices.pdf", "page": 5, "relevance_score": -0.5524 },
+    { "document": "nexla-platform-overview.pdf", "page": 5, "relevance_score": -0.5569 }
   ],
-  "chunks_used": 5
+  "chunks_used": 7
 }
 ```
 
