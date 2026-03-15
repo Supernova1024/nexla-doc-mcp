@@ -1,0 +1,13 @@
+services:
+  nexla-doc-mcp:
+    build: .
+    container_name: nexla-doc-mcp
+    env_file:
+      - .env
+    volumes:
+      - ./data:/app/data
+      - chroma_data:/app/.chroma_db
+    stdin_open: true
+
+volumes:
+  chroma_data:

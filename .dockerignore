@@ -1,0 +1,15 @@
+.venv/
+venv/
+.chroma_db/
+__pycache__/
+*.py[cod]
+*.egg-info/
+.env
+.git/
+.gitignore
+.vscode/
+.idea/
+.DS_Store
+*.md
+!data/README.md
+LICENSE
